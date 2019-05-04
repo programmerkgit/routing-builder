@@ -17,6 +17,12 @@
   },
   "homepage": "https://github.com/programmerkgit/routing-builder#readme",
   "dependencies": {
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "npm": "^6.9.0",
+    "uninstall": "0.0.0"
+  },
+  "devDependencies": {
+    "@types/jasmine": "^3.3.12",
+    "jasmine": "^3.4.0"
   }
 }

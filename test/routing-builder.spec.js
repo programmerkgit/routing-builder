@@ -94,10 +94,10 @@ describe('routing-builder', () => {
                     builder.post('*', [useMW], builder => {
                         builder.post('/', [useMW]);
                     });
-                    builder.put('/', [], builder => {
+                    builder.put('*', [], builder => {
                         builder.put('/:id', []);
                     });
-                    builder.delete('/', [], builder => {
+                    builder.delete('*', [], builder => {
                         builder.delete('/:id', []);
                     });
                 });

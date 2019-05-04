@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/programmerkgit/routing-builder/issues"
   },
-  "homepage": "https://github.com/programmerkgit/routing-builder#readme"
+  "homepage": "https://github.com/programmerkgit/routing-builder#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
 }

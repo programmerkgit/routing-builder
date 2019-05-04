@@ -28,21 +28,10 @@ const p = require('path');
 *
 * */
 class RoutingBuilder {
-    constructor(router, basePath = '', methodName) {
+    constructor(router, basePath = '', methodName = 'use') {
         this.router = router;
         this.basePath = basePath;
         this.methodName = methodName;
-    }
-    get basePath() {
-        return this.basePath;
-    }
-    getMergePath(path) {
-        if (this.basePath.match(/\*$/)) {
-            return p.join(this.basePath.slice(0, -1), path);
-        }
-        else {
-            return p.join(this.basePath, path);
-        }
     }
     /*
     *
@@ -72,6 +61,14 @@ class RoutingBuilder {
     delete(path, handlers, cb) {
         this.method('delete', path, handlers, cb);
     }
+    getMergePath(path) {
+        if (this.basePath.match(/\*$/)) {
+            return p.join(this.basePath.slice(0, -1), path);
+        }
+        else {
+            return p.join(this.basePath, path);
+        }
+    }
     /*
     *
     *  when method is 'use' or 'null', method is overridden
@@ -85,10 +82,12 @@ class RoutingBuilder {
             return methodName;
         }
         else {
-            if (this.methodName === methodName) {
-                new TypeError(`different method name was called ${this.methodName} ${methodName}`);
+            if (this.methodName !== methodName) {
+                throw new TypeError(`different method name was called '${this.methodName}' and '${methodName}'`);
             }
-            return this.methodName;
+            else {
+                return this.methodName;
+            }
         }
     }
     /*
@@ -109,12 +108,15 @@ class RoutingBuilder {
     * */
     method(methodName, path, handlers, cb) {
         const mergedMethodName = this.getMergeMethodName(methodName);
-        this.router[mergedMethodName](this.getMergePath(path), handlers);
+        if (0 < handlers.length) {
+            this.router[mergedMethodName](this.getMergePath(path), handlers);
+        }
         if (cb) {
             cb(new RoutingBuilder(this.router, this.getMergePath(path), mergedMethodName));
         }
     }
 }
+exports.RoutingBuilder = RoutingBuilder;
 function routingBuilder(router, callback) {
     callback(new RoutingBuilder(router));
 }

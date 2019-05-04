@@ -1,11 +1,11 @@
 {
   "name": "routing-builder",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "",
   "main": "src/routing-builder.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
+    "publish": "rm -rf dist; tsc; npm publish",
     "watch": "tsc -w --p tsconfig.spec.json"
   },
   "repository": {

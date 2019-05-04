@@ -34,28 +34,17 @@ const p = require('path');
 *
 * */
 
-class RoutingBuilder {
+
+export class RoutingBuilder {
 
     readonly router: Router;
-    readonly methodName?: MethodName;
-    readonly _basePath: string;
+    readonly methodName: MethodName;
+    readonly basePath: string;
 
-    constructor(router: Router, basePath: string = '', methodName?: MethodName) {
+    constructor(router: Router, basePath: string = '', methodName: MethodName = 'use') {
         this.router = router;
-        this._basePath = basePath;
+        this.basePath = basePath;
         this.methodName = methodName;
-    }
-
-    get basePath() {
-        return this._basePath;
-    }
-
-    getMergePath(path: string): string {
-        if (this.basePath.match(/\*$/)) {
-            return p.join(this.basePath.slice(0, -1), path);
-        } else {
-            return p.join(this.basePath, path);
-        }
     }
 
     /*
@@ -72,9 +61,11 @@ class RoutingBuilder {
     *
     * */
 
+
     use(path: string, handlers: RequestHandler[], cb?: (builder: RoutingBuilder) => any) {
         this.method('use', path, handlers, cb);
     }
+
 
     get(path: string, handlers: RequestHandler[], cb?: (builder: RoutingBuilder) => any) {
         this.method('get', path, handlers, cb);
@@ -92,6 +83,14 @@ class RoutingBuilder {
         this.method('delete', path, handlers, cb);
     }
 
+    private getMergePath(path: string): string {
+        if (this.basePath.match(/\*$/)) {
+            return p.join(this.basePath.slice(0, -1), path);
+        } else {
+            return p.join(this.basePath, path);
+        }
+    }
+
 
     /*
     *
@@ -102,14 +101,15 @@ class RoutingBuilder {
     *
     * */
 
-    getMergeMethodName(methodName: MethodName) {
+    private getMergeMethodName(methodName: MethodName) {
         if (this.methodName === 'use' || !this.methodName) {
             return methodName;
         } else {
-            if (this.methodName === methodName) {
-                new TypeError(`different method name was called ${ this.methodName } ${ methodName }`);
+            if (this.methodName !== methodName) {
+                throw new TypeError(`different method name was called '${ this.methodName }' and '${ methodName }'`);
+            } else {
+                return this.methodName;
             }
-            return this.methodName;
         }
     }
 
@@ -132,7 +132,9 @@ class RoutingBuilder {
 
     private method(methodName: MethodName, path: string, handlers: RequestHandler[], cb?: (builder: RoutingBuilder) => any) {
         const mergedMethodName = this.getMergeMethodName(methodName);
-        this.router[ mergedMethodName ](this.getMergePath(path), handlers);
+        if (0 < handlers.length) {
+            this.router[ mergedMethodName ](this.getMergePath(path), handlers);
+        }
         if (cb) {
             cb(new RoutingBuilder(this.router, this.getMergePath(path), mergedMethodName));
         }
@@ -140,9 +142,6 @@ class RoutingBuilder {
 }
 
 
-function routingBuilder(router: Router, callback: (builder: RoutingBuilder) => any) {
+export function routingBuilder(router: Router, callback: (builder: RoutingBuilder) => any) {
     callback(new RoutingBuilder(router));
 }
-
-
-export { routingBuilder };

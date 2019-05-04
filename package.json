@@ -2,9 +2,11 @@
   "name": "routing-builder",
   "version": "1.0.2",
   "description": "",
-  "main": "routing-builder.ts",
+  "main": "src/routing-builder.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "watch": "tsc -w --p tsconfig.spec.json"
   },
   "repository": {
     "type": "git",
@@ -16,13 +18,14 @@
     "url": "https://github.com/programmerkgit/routing-builder/issues"
   },
   "homepage": "https://github.com/programmerkgit/routing-builder#readme",
-  "dependencies": {
-    "express": "^4.16.4",
-    "npm": "^6.9.0",
-    "uninstall": "0.0.0"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "@types/express": "^4.16.1",
     "@types/jasmine": "^3.3.12",
-    "jasmine": "^3.4.0"
+    "@types/supertest": "^2.0.7",
+    "express": "^4.16.4",
+    "jasmine": "^3.4.0",
+    "nodemon": "^1.19.0",
+    "supertest": "^4.0.2"
   }
 }

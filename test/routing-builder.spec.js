@@ -10,6 +10,41 @@ describe('routing-builder', () => {
     beforeAll(() => {
     });
     describe('get', () => {
+        describe('/users /a', () => {
+            const app = express();
+            const body = { foo: 'bar' };
+            const next = ((req, res, next) => {
+                next();
+            });
+            const get = (req, res, next) => {
+                res.json({ foo: 'bar' });
+            };
+            routing_builder_1.routingBuilder(app, builder => {
+                builder.get('/users', [get], builder => {
+                    builder.get('/a', [next]);
+                });
+            });
+            it('should match /users', function (done) {
+                request(app).get('/users')
+                    .expect(body)
+                    .end(done);
+            });
+            it('should match /users/b', function (done) {
+                request(app).get('/users/b')
+                    .expect(body)
+                    .end(done);
+            });
+            it('should match /users/b/c', function (done) {
+                request(app).get('/users/b/c')
+                    .expect(body)
+                    .end(done);
+            });
+            it('should not match /users-foo', function (done) {
+                request(app).get('/users-foo')
+                    .expect({})
+                    .end(done);
+            });
+        });
         it('should * work', function (done) {
             const app = express();
             const body = { foo: 'bar' };
@@ -28,7 +63,7 @@ describe('routing-builder', () => {
                 .expect(body)
                 .end(done);
         });
-        it('should nest routing', function (done) {
+        it('use /users get * get *', function (done) {
             const app = express();
             const body = { foo: 'bar' };
             const next = ((req, res, next) => {
@@ -46,41 +81,6 @@ describe('routing-builder', () => {
             });
             request(app).get('/users/a')
                 .expect(body)
-                .end(done);
-        });
-        it('should call use get', function (done) {
-            const app = express();
-            const body = { foo: 'bar' };
-            const next = ((req, res, next) => {
-                next();
-            });
-            const get = (req, res, next) => {
-                res.json({ foo: 'bar' });
-            };
-            routing_builder_1.routingBuilder(app, builder => {
-                builder.use('*', [next], builder => {
-                    builder.use('/a', [get], builder => {
-                        builder.get('/b', [next]);
-                    });
-                });
-            });
-            request(app).get('/a/b')
-                .expect(body)
-                .end(done);
-        });
-        it('should error use get post', function () {
-        });
-        it('should path *', function () {
-        });
-        it('should call get', function (done) {
-            const app = express();
-            routing_builder_1.routingBuilder(app, (builder) => {
-                builder.get('/a', [(req, res, next) => {
-                        res.json({ foo: 'bar' });
-                    }]);
-            });
-            request(app).get('/a')
-                .expect({ foo: 'bar' })
                 .end(done);
         });
         it('should app truthy', function () {

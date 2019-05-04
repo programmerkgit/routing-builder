@@ -1,11 +1,11 @@
 {
   "name": "routing-builder",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "description": "",
-  "main": "src/routing-builder.ts",
+  "main": "dist/routing-builder.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "publish": "rm -rf dist; tsc; npm publish",
+    "build": "rm -rf dist; tsc;",
     "watch": "tsc -w --p tsconfig.spec.json"
   },
   "repository": {
@@ -26,6 +26,7 @@
     "express": "^4.16.4",
     "jasmine": "^3.4.0",
     "nodemon": "^1.19.0",
-    "supertest": "^4.0.2"
+    "supertest": "^4.0.2",
+    "typescript": "^3.4.5"
   }
 }

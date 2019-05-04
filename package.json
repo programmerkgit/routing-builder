@@ -1,0 +1,19 @@
+{
+  "name": "routing-builder",
+  "version": "1.0.2",
+  "description": "",
+  "main": "routing-builder.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/programmerkgit/routing-builder.git"
+  },
+  "author": "cojicoji",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/programmerkgit/routing-builder/issues"
+  },
+  "homepage": "https://github.com/programmerkgit/routing-builder#readme"
+}

@@ -107,9 +107,12 @@ class RoutingBuilder {
     *
     * */
     method(methodName, path, handlers, cb) {
+        handlers = typeof handlers === 'function' ? [handlers] : handlers;
         const mergedMethodName = this.getMergeMethodName(methodName);
+        /* If callback function passed, all nested routes should be matched */
+        let matchPath = cb ? [path, p.join(path, '*')] : path;
         if (0 < handlers.length) {
-            this.router[mergedMethodName](this.getMergePath(path), handlers);
+            this.router[mergedMethodName](matchPath, handlers);
         }
         if (cb) {
             cb(new RoutingBuilder(this.router, this.getMergePath(path), mergedMethodName));

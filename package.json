@@ -1,6 +1,6 @@
 {
   "name": "routing-builder",
-  "version": "1.0.14",
+  "version": "1.0.18",
   "description": "",
   "main": "dist/routing-builder.js",
   "types": "dist/routing-builder.d.ts",

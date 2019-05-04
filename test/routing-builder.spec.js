@@ -20,8 +20,13 @@ describe('routing-builder', () => {
                 res.json({ foo: 'bar' });
             };
             routing_builder_1.routingBuilder(app, builder => {
-                builder.get('/users', [get], builder => {
-                    builder.get('/a', [next]);
+                builder.use('*', [], builder => {
+                    builder.get('/users', get, builder => {
+                        builder.get('/a', next);
+                        it('should ', function () {
+                            expect(builder.basePath).toEqual('/users');
+                        });
+                    });
                 });
             });
             it('should match /users', function (done) {

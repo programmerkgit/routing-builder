@@ -62,24 +62,24 @@ export class RoutingBuilder {
     * */
 
 
-    use(path: string, handlers: RequestHandler[], cb?: (builder: RoutingBuilder) => any) {
+    use(path: string, handlers: RequestHandler[] | RequestHandler, cb?: (builder: RoutingBuilder) => any) {
         this.method('use', path, handlers, cb);
     }
 
 
-    get(path: string, handlers: RequestHandler[], cb?: (builder: RoutingBuilder) => any) {
+    get(path: string, handlers: RequestHandler[] | RequestHandler, cb?: (builder: RoutingBuilder) => any) {
         this.method('get', path, handlers, cb);
     }
 
-    post(path: string, handlers: RequestHandler[], cb?: (builder: RoutingBuilder) => any) {
+    post(path: string, handlers: RequestHandler[] | RequestHandler, cb?: (builder: RoutingBuilder) => any) {
         this.method('post', path, handlers, cb);
     }
 
-    put(path: string, handlers: RequestHandler[], cb?: (builder: RoutingBuilder) => any) {
+    put(path: string, handlers: RequestHandler[] | RequestHandler, cb?: (builder: RoutingBuilder) => any) {
         this.method('put', path, handlers, cb);
     }
 
-    delete(path: string, handlers: RequestHandler[], cb?: (builder: RoutingBuilder) => any) {
+    delete(path: string, handlers: RequestHandler[] | RequestHandler, cb?: (builder: RoutingBuilder) => any) {
         this.method('delete', path, handlers, cb);
     }
 
@@ -130,15 +130,16 @@ export class RoutingBuilder {
     *
     * */
 
-    private method(methodName: MethodName, path: string, handlers: RequestHandler[], cb?: (builder: RoutingBuilder) => any) {
+    private method(methodName: MethodName, path: string, handlers: RequestHandler[] | RequestHandler, cb?: (builder: RoutingBuilder) => any) {
+        handlers = typeof handlers === 'function' ? [ handlers ] : handlers;
         const mergedMethodName = this.getMergeMethodName(methodName);
         /* If callback function passed, all nested routes should be matched */
-        let pathMatch = cb ? p.join(path, '*') : path;
+        let matchPath = cb ? [ path, p.join(path, '*') ] : path;
         if (0 < handlers.length) {
-            this.router[ mergedMethodName ]([ this.getMergePath(path), this.getMergePath(pathMatch) ], handlers);
+            this.router[ mergedMethodName ](matchPath, handlers);
         }
         if (cb) {
-            cb(new RoutingBuilder(this.router, this.getMergePath(pathMatch), mergedMethodName));
+            cb(new RoutingBuilder(this.router, this.getMergePath(path), mergedMethodName));
         }
     }
 }
